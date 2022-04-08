@@ -107,35 +107,60 @@ public:
         else {std::cout << "can't divide by zero" <<std::endl;};
     }
     void printer() {std::cout << numerator << "/"<< denominator << std::endl;}
-    friend Fraction operator*(const Fraction &d1, const Fraction &d2);
+
+    Fraction operator*(Fraction const &rhs) const {
+        Fraction result((numerator * rhs.numerator),
+                     denominator * rhs.denominator);
+        return result;}
+
+    Fraction operator/(Fraction const &rhs) const {
+        Fraction result((numerator * rhs.denominator),
+                     denominator * rhs.numerator);
+        return result; }
+
 };
 
-Fraction operator*(const Fraction &d1, const Fraction &d2) {
-    return Fraction(d1.numerator * d2.numerator,d1.denominator * d2.denominator);
-}
+
 
 /* task 004 */
-class Card {
-protected:
-    enum suit {hearts = 1, Spades, Clubs, Diamonds};
-    enum value {ace = 1, two , three, four, five, six, seven, eight, nine, ten, jack, queen, king, joker};
-    bool position = false;
-public:
-    Card(){};
-    Card(enum suit,enum value){
-        // я не разобрался как работать с этим типом данных, посмотрю на разборе
-    };
-    void Flip(){
-        position =! position;
+enum eCardSuit { SPADES, CLUBS, DIAMONDS, HEARTS };
+enum eCardValue {
+    ACE   = 1,
+    TWO   = 2,
+    THREE = 3,
+    FOUR  = 4,
+    FIVE  = 5,
+    SIX   = 6,
+    SEVEN = 7,
+    EIGHT = 8,
+    NINE  = 9,
+    TEN   = 10,
+    JACK  = 10,
+    QUEEN = 10,
+    KING  = 10
     };
 
-    int GetValue() {return value();
+class Card {
+protected:
+    eCardSuit suit;
+    eCardValue value;
+    bool isCoverUp = false;
+public:
+    Card(){};
+    Card(eCardSuit _suit, eCardValue _value) : suit(_suit), value(_value) {
+        isCoverUp = true;
+    }
+    void Flip(){
+        isCoverUp =! isCoverUp;
+    };
+
+    eCardValue getValue() const {
+        return value;
     }
 
     void info (){
-        std::cout << "Card = " << suit()  << " " <<  value() << " " << position << std::endl;
+        std::cout << "Card = " << suit  << " " <<  value << " " << isCoverUp << std::endl;
     }
-
 };
 
 
@@ -161,16 +186,12 @@ int main() {
     Fraction f2(2, 2);
     f1.printer();
     f2.printer();
-
-    //Fraction f3 = Fraction f1 * Fraction f2;
-    //f3.printer();
-
-    // с перегрузкой я не совсем разобрался, сомтрел по методичке
-    // ноо видимо что-то упустил - посмотрю на разборе и потом поправлю
+    Fraction f3 =  f1 * f2;
+    f3.printer();
 
     std::cout << "\n";
     std::cout << "Task 4" << std::endl;
-    Card k1;
+    Card k1(HEARTS, QUEEN);
     k1.info();
     k1.Flip();
     k1.info();
